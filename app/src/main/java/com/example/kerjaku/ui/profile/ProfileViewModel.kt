@@ -69,16 +69,65 @@ class ProfileViewModel : ViewModel() {
             val uid = SupabaseApi.client.auth.currentUserOrNull()?.id ?: return@launch
 
             SupabaseApi.client.postgrest["profiles"].update(
-                {
-                    set("phone", phone)
-                    set("city", city)
-                }
+                mapOf(
+                    "phone" to phone,
+                    "city" to city
+                )
             ) { filter { eq("id", uid) } }
 
-            loadProfile() 
+            loadProfile()
             onSuccess()
         } catch (e: Exception) {
             errorMessage = "Gagal memperbarui profil: ${e.message}"
+        } finally {
+            isLoading = false
+        }
+    }
+
+    fun uploadKtp(imageBytes: ByteArray, onSuccess: (String) -> Unit) = viewModelScope.launch {
+        isLoading = true
+        try {
+            val uid = SupabaseApi.client.auth.currentUserOrNull()?.id ?: return@launch
+            val path = "$uid/ktp_${System.currentTimeMillis()}.jpg"
+
+            // Fix: Move upsert into the configuration lambda
+            SupabaseApi.client.storage["ktp-docs"].upload(path, imageBytes) {
+                upsert = true
+            }
+            val url = SupabaseApi.client.storage["ktp-docs"].publicUrl(path)
+
+            // Fix: Use mapOf for consistent update syntax
+            SupabaseApi.client.postgrest["profiles"].update(
+                mapOf("ktp_url" to url)
+            ) { filter { eq("id", uid) } }
+
+            loadProfile()
+            onSuccess(url)
+        } catch (e: Exception) {
+            errorMessage = "Gagal unggah KTP: ${e.message}"
+        } finally {
+            isLoading = false
+        }
+    }
+
+    fun updateProfileComplete(fullName: String, phone: String, city: String, onSuccess: () -> Unit) = viewModelScope.launch {
+        isLoading = true
+        errorMessage = null
+        try {
+            val uid = SupabaseApi.client.auth.currentUserOrNull()?.id ?: return@launch
+
+            SupabaseApi.client.postgrest["profiles"].update(
+                mapOf(
+                    "full_name" to fullName,
+                    "phone" to phone,
+                    "city" to city
+                )
+            ) { filter { eq("id", uid) } }
+
+            loadProfile()
+            onSuccess()
+        } catch (e: Exception) {
+            errorMessage = "Gagal memperbarui data: ${e.message}"
         } finally {
             isLoading = false
         }
