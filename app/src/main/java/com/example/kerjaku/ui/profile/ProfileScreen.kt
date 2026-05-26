@@ -19,7 +19,8 @@ import coil3.compose.AsyncImage
 @Composable
 fun ProfileScreen(
     onLogoutClick: () -> Unit,
-    viewModel: ProfileViewModel = viewModel()
+    viewModel: ProfileViewModel = viewModel(),
+    onNavigateToEdit: () -> Unit
 ) {
     // Memuat data profil secara otomatis saat layar dibuka
     LaunchedEffect(Unit) {
@@ -84,7 +85,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Button(
-                    onClick = { /* TODO: Navigasi ke EditProfileScreen */ },
+                    onClick = onNavigateToEdit,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Edit Profil")

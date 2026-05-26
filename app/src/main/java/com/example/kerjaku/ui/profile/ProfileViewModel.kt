@@ -61,4 +61,26 @@ class ProfileViewModel : ViewModel() {
             isLoading = false
         }
     }
+
+    fun updateProfileData(phone: String, city: String, onSuccess: () -> Unit) = viewModelScope.launch {
+        isLoading = true
+        errorMessage = null
+        try {
+            val uid = SupabaseApi.client.auth.currentUserOrNull()?.id ?: return@launch
+
+            SupabaseApi.client.postgrest["profiles"].update(
+                {
+                    set("phone", phone)
+                    set("city", city)
+                }
+            ) { filter { eq("id", uid) } }
+
+            loadProfile() 
+            onSuccess()
+        } catch (e: Exception) {
+            errorMessage = "Gagal memperbarui profil: ${e.message}"
+        } finally {
+            isLoading = false
+        }
+    }
 }
