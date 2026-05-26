@@ -14,7 +14,7 @@ private val MinimalistColorScheme = lightColorScheme(
 )
 
 @Composable
-fun KerjaKu(content: @Composable () -> Unit) {
+fun Kerjaku(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = MinimalistColorScheme,
         typography = Typography,
