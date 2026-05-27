@@ -15,14 +15,17 @@ sealed class Screen(val route: String, val title: String? = null, val icon: Imag
     object Main : Screen("main")
 
     // Bottom Navigation Routes
-    object CariKerja : Screen("cari_kerja", "Cari Kerja", Icons.Default.Work)
-    object KelolaPekerja : Screen("kelola_pekerja", "Kelola Pekerja", Icons.Default.Home)
-    object Profil : Screen("profil", "Profil", Icons.Default.AccountCircle)
+    object CariKerja : Screen("cari_kerja", "Cari Kerja", Icons.Filled.Work)
+    object KelolaPekerja : Screen("kelola_pekerja", "Kelola Pekerja", Icons.Filled.Home)
+    object Profil : Screen("profil", "Profil", Icons.Filled.AccountCircle)
 
     // Sub-routes (Detail & Forms)
     object EditProfile : Screen("edit_profile")
     object CreateJob : Screen("create_job")
     object JobDetail : Screen("job_detail/{jobId}") {
         fun createRoute(jobId: String) = "job_detail/$jobId"
+    }
+    object ManageApplicants : Screen("manage_applicants/{jobId}") {
+        fun createRoute(jobId: String) = "manage_applicants/$jobId"
     }
 }

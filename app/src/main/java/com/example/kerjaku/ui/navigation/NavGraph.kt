@@ -96,5 +96,14 @@ fun KerjaKuNavGraph() {
                 viewModel = jobViewModel
             )
         }
+        composable(Screen.ManageApplicants.route) { backStackEntry ->
+            val jobId = backStackEntry.arguments?.getString("jobId") ?: return@composable
+            val jobViewModel: com.example.kerjaku.ui.job.JobViewModel = viewModel()
+            com.example.kerjaku.ui.customer.ManageApplicantsScreen(
+                jobId = jobId,
+                navController = rootNavController,
+                viewModel = jobViewModel
+            )
+        }
     }
 }

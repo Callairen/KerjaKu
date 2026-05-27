@@ -45,8 +45,7 @@ fun CustomerHomeScreen(
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     items(myJobs) { job ->
                         JobItemCard(job = job, onClick = {
-                            // Nantinya di Fase 5 kita arahkan ke halaman "Manajemen Pelamar"
-                            // navController.navigate("manage_applicants/${job.id}")
+                                    navController.navigate(Screen.ManageApplicants.createRoute(job.id))
                         })
                     }
                 }

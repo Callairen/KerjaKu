@@ -27,6 +27,9 @@ class JobViewModel : ViewModel() {
     val actionSuccess: StateFlow<Boolean> = _actionSuccess
     private val _myPostedJobs = MutableStateFlow<List<Job>>(emptyList())
     val myPostedJobs: StateFlow<List<Job>> = _myPostedJobs
+
+    private val _applicants = MutableStateFlow<List<JobApplication>>(emptyList())
+    val applicants: StateFlow<List<JobApplication>> = _applicants
     fun fetchOpenJobs() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -110,6 +113,36 @@ class JobViewModel : ViewModel() {
                 currentUser?.let { user ->
                     _myPostedJobs.value = repository.getMyPostedJobs(user.id)
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+    fun fetchApplicants(jobId: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                _applicants.value = repository.getApplicantsForJob(jobId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun acceptApplicant(applicationId: String, jobId: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                repository.updateApplicationStatus(applicationId, "ACCEPTED")
+                repository.updateJobStatus(jobId, "ON_GOING")
+
+                fetchApplicants(jobId)
+                fetchMyPostedJobs()
+                _actionSuccess.value = true
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {

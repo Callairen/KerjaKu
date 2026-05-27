@@ -6,6 +6,7 @@ import com.example.kerjaku.data.network.SupabaseApi
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import io.github.jan.supabase.postgrest.query.Columns
 
 class JobRepository {
     private val client = SupabaseApi.client
@@ -56,6 +57,38 @@ class JobRepository {
                     filter { eq("employer_id", employerId) }
                 }
                 .decodeList<Job>()
+        }
+    }
+    suspend fun getApplicantsForJob(jobId: String): List<JobApplication> {
+        return withContext(Dispatchers.IO) {
+            client.postgrest["job_applications"]
+                // Sintaks ini akan mengambil data pelamar sekaligus profilnya (JOIN)
+                .select(columns = Columns.raw("*, profiles(*)")) {
+                    filter { eq("job_id", jobId) }
+                }
+                .decodeList<JobApplication>()
+        }
+    }
+
+    // Mengubah status lamaran (misal: APPLIED -> ACCEPTED)
+    suspend fun updateApplicationStatus(applicationId: String, newStatus: String) {
+        withContext(Dispatchers.IO) {
+            client.postgrest["job_applications"].update(
+                { set("status", newStatus) }
+            ) {
+                filter { eq("id", applicationId) }
+            }
+        }
+    }
+
+    // Mengubah status pekerjaan (misal: OPEN -> ON_GOING)
+    suspend fun updateJobStatus(jobId: String, newStatus: String) {
+        withContext(Dispatchers.IO) {
+            client.postgrest["jobs"].update(
+                { set("status", newStatus) }
+            ) {
+                filter { eq("id", jobId) }
+            }
         }
     }
 }

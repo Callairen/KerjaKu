@@ -12,4 +12,6 @@ data class Profile(
     @SerialName("avatar_url") val avatarUrl: String? = null,
     @SerialName("ktp_url") val ktpUrl: String? = null,
     @SerialName("is_verified") val isVerified: Boolean = false
-)
+) {
+    val full_name: String
+}
