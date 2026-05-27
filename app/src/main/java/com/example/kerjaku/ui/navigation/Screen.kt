@@ -28,4 +28,9 @@ sealed class Screen(val route: String, val title: String? = null, val icon: Imag
     object ManageApplicants : Screen("manage_applicants/{jobId}") {
         fun createRoute(jobId: String) = "manage_applicants/$jobId"
     }
+
+    object WorkerTracker : Screen("worker_tracker")
+    object FinishJob : Screen("finish_job/{applicationId}") {
+        fun createRoute(applicationId: String) = "finish_job/$applicationId"
+    }
 }

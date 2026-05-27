@@ -91,4 +91,30 @@ class JobRepository {
             }
         }
     }
+    // Menarik riwayat lamaran dan pekerjaan yang sedang berjalan milik pekerja
+    suspend fun getMyApplications(workerId: String): List<JobApplication> {
+        return withContext(Dispatchers.IO) {
+            client.postgrest["job_applications"]
+                // Menggunakan JOIN untuk mengambil detail pekerjaan sekaligus
+                .select(columns = Columns.raw("*, jobs(*)")) {
+                    filter { eq("worker_id", workerId) }
+                }
+                .decodeList<JobApplication>()
+        }
+    }
+
+    // Memperbarui status lamaran menjadi FINISHED dengan menyertakan bukti
+    suspend fun finishJobApplication(applicationId: String, notes: String, proofUrl: String) {
+        withContext(Dispatchers.IO) {
+            client.postgrest["job_applications"].update(
+                {
+                    set("status", "FINISHED")
+                    set("completion_notes", notes)
+                    set("completion_proof_url", proofUrl)
+                }
+            ) {
+                filter { eq("id", applicationId) }
+            }
+        }
+    }
 }

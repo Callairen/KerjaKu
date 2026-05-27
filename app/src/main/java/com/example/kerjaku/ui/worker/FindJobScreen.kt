@@ -10,7 +10,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.kerjaku.data.model.Job
 import com.example.kerjaku.ui.job.JobViewModel
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FindJobScreen(
     navController: NavController,
@@ -19,33 +22,41 @@ fun FindJobScreen(
     val jobs by viewModel.jobs.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
-    // Otomatis tarik data saat layar pertama kali dipanggil
     LaunchedEffect(Unit) {
         viewModel.fetchOpenJobs()
     }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Katalog Pekerjaan", style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (isLoading) {
-            CircularProgressIndicator()
-        } else {
-            if (jobs.isEmpty()) {
-                Text("Belum ada pekerjaan harian di sekitarmu.")
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Katalog Pekerjaan") },
+                actions = {
+                    IconButton(onClick = { navController.navigate("worker_tracker") }) {
+                        Icon(Icons.Default.List, contentDescription = "Pekerjaan Saya")
+                    }
+                }
+            )
+        }
+    ) { padding ->
+        Column(modifier = Modifier.padding(padding).padding(16.dp).fillMaxSize()) {
+            if (isLoading) {
+                CircularProgressIndicator()
             } else {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    items(jobs) { job ->
-                        JobItemCard(job = job, onClick = {
-                            navController.navigate("job_detail/${job.id}")
-                        })
+                if (jobs.isEmpty()) {
+                    Text("Belum ada pekerjaan harian di sekitarmu.")
+                } else {
+                    LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        items(jobs) { job ->
+                            JobItemCard(job = job, onClick = {
+                                navController.navigate("job_detail/${job.id}")
+                            })
+                        }
                     }
                 }
             }
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JobItemCard(job: Job, onClick: () -> Unit) {

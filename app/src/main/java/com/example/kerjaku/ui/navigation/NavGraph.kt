@@ -105,5 +105,22 @@ fun KerjaKuNavGraph() {
                 viewModel = jobViewModel
             )
         }
+        composable(Screen.WorkerTracker.route) {
+            val jobViewModel: com.example.kerjaku.ui.job.JobViewModel = viewModel()
+            com.example.kerjaku.ui.worker.WorkerTrackerScreen(
+                navController = rootNavController,
+                viewModel = jobViewModel
+            )
+        }
+
+        composable(Screen.FinishJob.route) { backStackEntry ->
+            val applicationId = backStackEntry.arguments?.getString("applicationId") ?: return@composable
+            val jobViewModel: com.example.kerjaku.ui.job.JobViewModel = viewModel()
+            com.example.kerjaku.ui.worker.FinishJobScreen(
+                applicationId = applicationId,
+                navController = rootNavController,
+                viewModel = jobViewModel
+            )
+        }
     }
 }

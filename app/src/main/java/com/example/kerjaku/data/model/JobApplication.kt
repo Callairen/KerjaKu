@@ -12,5 +12,6 @@ data class JobApplication(
     val completion_proof_url: String? = null,
     val created_at: String? = null,
     val updated_at: String? = null,
-    val profiles: Profile? = null
+    val profiles: Profile? = null,
+    val jobs: Job? = null
 )

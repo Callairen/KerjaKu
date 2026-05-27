@@ -30,6 +30,9 @@ class JobViewModel : ViewModel() {
 
     private val _applicants = MutableStateFlow<List<JobApplication>>(emptyList())
     val applicants: StateFlow<List<JobApplication>> = _applicants
+    private val _myApplications = MutableStateFlow<List<JobApplication>>(emptyList())
+    val myApplications: StateFlow<List<JobApplication>> = _myApplications
+
     fun fetchOpenJobs() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -142,6 +145,37 @@ class JobViewModel : ViewModel() {
 
                 fetchApplicants(jobId)
                 fetchMyPostedJobs()
+                _actionSuccess.value = true
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun fetchMyApplications() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val currentUser = SupabaseApi.client.auth.currentUserOrNull()
+                currentUser?.let { user ->
+                    _myApplications.value = repository.getMyApplications(user.id)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun finishJob(applicationId: String, notes: String, proofUrl: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                repository.finishJobApplication(applicationId, notes, proofUrl)
+                fetchMyApplications() // Segarkan data
                 _actionSuccess.value = true
             } catch (e: Exception) {
                 e.printStackTrace()
