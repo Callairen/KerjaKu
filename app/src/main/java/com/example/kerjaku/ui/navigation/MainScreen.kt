@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -12,8 +13,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.kerjaku.ui.job.JobViewModel
 import com.example.kerjaku.ui.profile.ProfileScreen
 import com.example.kerjaku.ui.profile.ProfileViewModel
+import com.example.kerjaku.ui.worker.FindJobScreen
 
 @Composable
 fun MainScreen(
@@ -35,8 +38,11 @@ fun MainScreen(
         ) {
             // TAB 1: Mode Pekerja (Mencari Pekerjaan)
             composable(Screen.CariKerja.route) {
-                // TODO: Panggil WorkerHomeScreen(navController = rootNavController)
-                Text("Katalog Pekerjaan (Cari Kerja)")
+                val jobViewModel: JobViewModel = viewModel()
+                FindJobScreen(
+                    navController = rootNavController, // Pakai rootNav agar layar detail menutupi tab bar
+                    viewModel = jobViewModel
+                )
             }
 
             // TAB 2: Mode Pelanggan (Mengelola Pekerjaan yang Dibuat)
