@@ -91,6 +91,10 @@ fun KerjaKuNavGraph() {
         // Rute untuk Layar Pembuatan Pekerjaan (Customer Mode)
         composable(Screen.CreateJob.route) {
             val jobViewModel: com.example.kerjaku.ui.job.JobViewModel = viewModel()
+            com.example.kerjaku.ui.job.CreateJobScreen(
+                navController = rootNavController,
+                viewModel = jobViewModel
+            )
         }
     }
 }

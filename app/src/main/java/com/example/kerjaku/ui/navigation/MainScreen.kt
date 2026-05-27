@@ -47,8 +47,11 @@ fun MainScreen(
 
             // TAB 2: Mode Pelanggan (Mengelola Pekerjaan yang Dibuat)
             composable(Screen.KelolaPekerja.route) {
-                // TODO: Panggil CustomerHomeScreen(navController = rootNavController)
-                Text("Dasbor Kelola Pekerja")
+                val jobViewModel: com.example.kerjaku.ui.job.JobViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+                com.example.kerjaku.ui.customer.CustomerHomeScreen(
+                    navController = rootNavController, // Menggunakan rootNavController agar FAB menutupi BottomBar
+                    viewModel = jobViewModel
+                )
             }
 
             // TAB 3: Profil Universal

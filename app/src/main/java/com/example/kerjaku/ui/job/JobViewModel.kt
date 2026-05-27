@@ -25,7 +25,8 @@ class JobViewModel : ViewModel() {
 
     private val _actionSuccess = MutableStateFlow(false)
     val actionSuccess: StateFlow<Boolean> = _actionSuccess
-
+    private val _myPostedJobs = MutableStateFlow<List<Job>>(emptyList())
+    val myPostedJobs: StateFlow<List<Job>> = _myPostedJobs
     fun fetchOpenJobs() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -101,6 +102,21 @@ class JobViewModel : ViewModel() {
         }
     }
 
+    fun fetchMyPostedJobs() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val currentUser = SupabaseApi.client.auth.currentUserOrNull()
+                currentUser?.let { user ->
+                    _myPostedJobs.value = repository.getMyPostedJobs(user.id)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
     fun resetActionState() {
         _actionSuccess.value = false
     }

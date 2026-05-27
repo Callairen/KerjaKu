@@ -49,4 +49,13 @@ class JobRepository {
             client.postgrest["job_applications"].insert(application)
         }
     }
+    suspend fun getMyPostedJobs(employerId: String): List<Job> {
+        return withContext(Dispatchers.IO) {
+            client.postgrest["jobs"]
+                .select {
+                    filter { eq("employer_id", employerId) }
+                }
+                .decodeList<Job>()
+        }
+    }
 }
