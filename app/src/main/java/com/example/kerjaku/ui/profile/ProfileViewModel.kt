@@ -12,6 +12,11 @@ import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.launch
+import io.github.jan.supabase.postgrest.rpc
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class TopUpRequest(val p_user_id: String, val p_amount: Double)
 
 class ProfileViewModel : ViewModel() {
     var profile by mutableStateOf<Profile?>(null)
@@ -128,6 +133,25 @@ class ProfileViewModel : ViewModel() {
             onSuccess()
         } catch (e: Exception) {
             errorMessage = "Gagal memperbarui data: ${e.message}"
+        } finally {
+            isLoading = false
+        }
+    }
+    fun topUpBalance(amount: Double, onSuccess: () -> Unit) = viewModelScope.launch {
+        isLoading = true
+        errorMessage = null
+        try {
+            val uid = SupabaseApi.client.auth.currentUserOrNull()?.id ?: return@launch
+            val request = TopUpRequest(p_user_id = uid, p_amount = amount)
+
+            // Panggil RPC database
+            SupabaseApi.client.postgrest.rpc("top_up_balance", request)
+
+            // Segarkan profil agar saldo terbaru muncul
+            loadProfile()
+            onSuccess()
+        } catch (e: Exception) {
+            errorMessage = "Gagal Top-Up: ${e.message}"
         } finally {
             isLoading = false
         }

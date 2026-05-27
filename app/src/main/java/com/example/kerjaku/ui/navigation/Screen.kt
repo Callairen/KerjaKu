@@ -33,4 +33,5 @@ sealed class Screen(val route: String, val title: String? = null, val icon: Imag
     object FinishJob : Screen("finish_job/{applicationId}") {
         fun createRoute(applicationId: String) = "finish_job/$applicationId"
     }
+    object TopUp : Screen("top_up")
 }

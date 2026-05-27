@@ -33,6 +33,13 @@ class JobViewModel : ViewModel() {
     private val _myApplications = MutableStateFlow<List<JobApplication>>(emptyList())
     val myApplications: StateFlow<List<JobApplication>> = _myApplications
 
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
+    fun clearErrorMessage() {
+        _errorMessage.value = null
+    }
+
     fun fetchOpenJobs() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -81,6 +88,7 @@ class JobViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                _errorMessage.value = "Saldo Anda tidak mencukupi untuk membayar upah pekerjaan ini. Silakan isi ulang."
             } finally {
                 _isLoading.value = false
             }

@@ -14,4 +14,5 @@ object SupabaseApi {
         install(Postgrest)
         install(Storage)
     }
+
 }

@@ -58,9 +58,10 @@ fun MainScreen(
             composable(Screen.Profil.route) {
                 ProfileScreen(
                     viewModel = profileViewModel,
+                    navController = rootNavController, // 2. Lewatkan rootNavController ke sini
                     onLogoutClick = {
                         rootNavController.navigate(Screen.Login.route) {
-                            popUpTo(0) { inclusive = true } // Bersihkan seluruh riwayat navigasi
+                            popUpTo(0) { inclusive = true }
                         }
                     },
                     onNavigateToEdit = {

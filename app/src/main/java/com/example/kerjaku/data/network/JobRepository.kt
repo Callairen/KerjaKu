@@ -7,7 +7,27 @@ import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.rpc
+import kotlinx.serialization.Serializable
 
+@Serializable
+data class CreateJobRequest(
+    val p_employer_id: String,
+    val p_category_id: Long?,
+    val p_title: String,
+    val p_description: String?,
+    val p_wage: Double,
+    val p_duration_days: Int,
+    val p_city: String,
+    val p_district: String?,
+    val p_village: String?
+)
+
+@Serializable
+data class VerifyPaymentRequest(
+    val p_application_id: String,
+    val p_job_id: String
+)
 class JobRepository {
     private val client = SupabaseApi.client
 
@@ -40,7 +60,19 @@ class JobRepository {
     // Menyimpan pekerjaan baru ke database
     suspend fun createJob(job: Job) {
         withContext(Dispatchers.IO) {
-            client.postgrest["jobs"].insert(job)
+            val request = CreateJobRequest(
+                p_employer_id = job.employer_id,
+                p_category_id = job.category_id,
+                p_title = job.title,
+                p_description = job.description,
+                p_wage = job.wage,
+                p_duration_days = job.duration_days,
+                p_city = job.city,
+                p_district = job.district,
+                p_village = job.village
+            )
+            // Memanggil RPC yang mengecek saldo
+            client.postgrest.rpc("create_job_with_balance_check", request)
         }
     }
 
@@ -119,6 +151,9 @@ class JobRepository {
     }
     suspend fun verifyAndCompleteJob(applicationId: String, jobId: String) {
         withContext(Dispatchers.IO) {
+            val request = VerifyPaymentRequest(applicationId, jobId)
+            // Memanggil RPC untuk transfer saldo
+            client.postgrest.rpc("finalize_payment_and_status", request)
             client.postgrest["job_applications"].update(
                 { set("status", "APPROVED_AND_PAID") }
             ) {

@@ -72,7 +72,11 @@ fun ApplicantItemCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(application.profiles?.full_name ?: "Pengguna Tidak Diketahui", style = MaterialTheme.typography.titleLarge)
+// Ubah bagian ini:
+            Text(
+                text = application.profiles?.fullName ?: "Pengguna Tidak Diketahui", // Gunakan fullName
+                style = MaterialTheme.typography.titleLarge
+            )
             Text("Kontak: ${application.profiles?.phone ?: "-"}")
             Text("Lokasi Pekerja: ${application.profiles?.city ?: "-"}")
 

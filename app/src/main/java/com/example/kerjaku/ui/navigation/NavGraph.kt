@@ -122,5 +122,11 @@ fun KerjaKuNavGraph() {
                 viewModel = jobViewModel
             )
         }
+        composable(Screen.TopUp.route) {
+            com.example.kerjaku.ui.profile.TopUpScreen(
+                navController = rootNavController,
+                viewModel = profileViewModel
+            )
+        }
     }
 }

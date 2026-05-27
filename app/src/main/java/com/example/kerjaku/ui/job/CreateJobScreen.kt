@@ -24,7 +24,7 @@ fun CreateJobScreen(
     var city by remember { mutableStateOf("") }
     var district by remember { mutableStateOf("") }
     var village by remember { mutableStateOf("") }
-
+    val errorMessage by viewModel.errorMessage.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val actionSuccess by viewModel.actionSuccess.collectAsState()
 
@@ -36,6 +36,28 @@ fun CreateJobScreen(
         }
     }
 
+    if (errorMessage != null) {
+        AlertDialog(
+            onDismissRequest = { viewModel.clearErrorMessage() },
+            title = { Text("Pembuatan Gagal") },
+            text = { Text(errorMessage ?: "") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.clearErrorMessage()
+                        navController.navigate("top_up") // Arahkan ke halaman Top-Up
+                    }
+                ) {
+                    Text("Isi Saldo")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.clearErrorMessage() }) {
+                    Text("Batal")
+                }
+            }
+        )
+    }
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Buat Pekerjaan Baru") })

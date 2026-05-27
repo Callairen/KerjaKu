@@ -15,11 +15,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
+import androidx.navigation.NavController
 
 @Composable
 fun ProfileScreen(
     onLogoutClick: () -> Unit,
     viewModel: ProfileViewModel = viewModel(),
+    navController: NavController,
     onNavigateToEdit: () -> Unit
 ) {
     LaunchedEffect(Unit) {
@@ -110,6 +112,9 @@ fun ProfileScreen(
                             style = MaterialTheme.typography.headlineMedium,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
+                    }
+                    Button(onClick = { navController.navigate("top_up") }) {
+                        Text("Isi Saldo")
                     }
                 }
 
