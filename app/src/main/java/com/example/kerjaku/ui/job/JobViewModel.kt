@@ -184,6 +184,21 @@ class JobViewModel : ViewModel() {
             }
         }
     }
+    fun verifyJob(applicationId: String, jobId: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                repository.verifyAndCompleteJob(applicationId, jobId)
+                fetchApplicants(jobId)
+                fetchMyPostedJobs()
+                _actionSuccess.value = true
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
     fun resetActionState() {
         _actionSuccess.value = false
     }

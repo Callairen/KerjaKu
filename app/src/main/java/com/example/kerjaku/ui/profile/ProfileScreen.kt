@@ -22,7 +22,6 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = viewModel(),
     onNavigateToEdit: () -> Unit
 ) {
-    // Memuat data profil secara otomatis saat layar dibuka
     LaunchedEffect(Unit) {
         viewModel.loadProfile()
     }
@@ -33,6 +32,7 @@ fun ProfileScreen(
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Text(
             text = "Profil Akun",
             style = MaterialTheme.typography.headlineMedium,
@@ -71,18 +71,49 @@ fun ProfileScreen(
         if (viewModel.isLoading) {
             CircularProgressIndicator()
         } else {
-            viewModel.profile?.let { userProfile ->
+
+            viewModel.profile?.let { profile ->
+
                 Text(
-                    text = userProfile.fullName,
+                    text = profile.fullName.toString(),
                     style = MaterialTheme.typography.titleLarge
                 )
+
                 Text(
-                    text = "Peran: ${userProfile.role.uppercase()}",
+                    text = "Peran: ${profile.role.toString().uppercase()}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                // CARD SALDO DOMPET
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+
+                        Text(
+                            text = "Saldo Dompet",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text(
+                            text = "Rp ${profile.balance ?: 0.0}",
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
                     onClick = onNavigateToEdit,
@@ -97,7 +128,10 @@ fun ProfileScreen(
                     onClick = onLogoutClick,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Keluar (Logout)", color = MaterialTheme.colorScheme.error)
+                    Text(
+                        text = "Keluar (Logout)",
+                        color = MaterialTheme.colorScheme.error
+                    )
                 }
             }
         }

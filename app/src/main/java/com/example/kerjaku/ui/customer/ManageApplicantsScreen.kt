@@ -48,9 +48,10 @@ fun ManageApplicantsScreen(
                         ApplicantItemCard(
                             application = application,
                             onAccept = {
-                                application.id?.let { appId ->
-                                    viewModel.acceptApplicant(appId, jobId)
-                                }
+                                application.id?.let { appId -> viewModel.acceptApplicant(appId, jobId) }
+                            },
+                            onVerify = {
+                                application.id?.let { appId -> viewModel.verifyJob(appId, jobId) }
                             }
                         )
                     }
@@ -61,25 +62,52 @@ fun ManageApplicantsScreen(
 }
 
 @Composable
-fun ApplicantItemCard(application: JobApplication, onAccept: () -> Unit) {
+fun ApplicantItemCard(
+    application: JobApplication,
+    onAccept: () -> Unit,
+    onVerify: () -> Unit // Tambahkan parameter aksi ini
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            // Kita memanfaatkan relasi profiles yang diambil tadi
             Text(application.profiles?.full_name ?: "Pengguna Tidak Diketahui", style = MaterialTheme.typography.titleLarge)
             Text("Kontak: ${application.profiles?.phone ?: "-"}")
             Text("Lokasi Pekerja: ${application.profiles?.city ?: "-"}")
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            if (application.status == "APPLIED") {
-                Button(onClick = onAccept, modifier = Modifier.fillMaxWidth()) {
-                    Text("Terima Pekerja Ini")
+            when (application.status) {
+                "APPLIED" -> {
+                    Button(onClick = onAccept, modifier = Modifier.fillMaxWidth()) {
+                        Text("Terima Pekerja Ini")
+                    }
                 }
-            } else {
-                Text("Status: ${application.status}", color = MaterialTheme.colorScheme.primary)
+                "ACCEPTED" -> {
+                    Text("Status: Sedang Berjalan", color = MaterialTheme.colorScheme.primary)
+                    Text("Menunggu pekerja menyelesaikan tugasnya.", style = MaterialTheme.typography.bodySmall)
+                }
+                "FINISHED" -> {
+                    Text("Status: Laporan Selesai Diterima", color = MaterialTheme.colorScheme.tertiary)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("Catatan Pekerja: ${application.completion_notes ?: "Tidak ada"}")
+                    Text("Tautan Bukti: ${application.completion_proof_url ?: "Tidak ada"}")
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Button(
+                        onClick = onVerify,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                    ) {
+                        Text("Verifikasi & Selesaikan Pembayaran")
+                    }
+                }
+                "APPROVED_AND_PAID" -> {
+                    Text("Status: Selesai & Dibayar", color = MaterialTheme.colorScheme.primary)
+                }
+                else -> {
+                    Text("Status: ${application.status}")
+                }
             }
         }
     }

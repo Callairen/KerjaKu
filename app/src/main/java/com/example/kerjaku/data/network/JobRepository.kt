@@ -117,4 +117,19 @@ class JobRepository {
             }
         }
     }
+    suspend fun verifyAndCompleteJob(applicationId: String, jobId: String) {
+        withContext(Dispatchers.IO) {
+            client.postgrest["job_applications"].update(
+                { set("status", "APPROVED_AND_PAID") }
+            ) {
+                filter { eq("id", applicationId) }
+            }
+
+            client.postgrest["jobs"].update(
+                { set("status", "COMPLETED") }
+            ) {
+                filter { eq("id", jobId) }
+            }
+        }
+    }
 }

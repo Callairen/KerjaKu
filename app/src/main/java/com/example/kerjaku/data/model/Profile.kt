@@ -1,17 +1,22 @@
 package com.example.kerjaku.data.model
-import kotlinx.serialization.SerialName
+
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Profile(
     val id: String = "",
-    @SerialName("full_name") val fullName: String = "",
+    val full_name: String,
+    val email: String? = null,
     val phone: String? = null,
     val city: String? = null,
-    val role: String = "", // 'worker' atau 'customer'
-    @SerialName("avatar_url") val avatarUrl: String? = null,
-    @SerialName("ktp_url") val ktpUrl: String? = null,
-    @SerialName("is_verified") val isVerified: Boolean = false
+    val district: String? = null,
+    val village: String? = null,
+    val detail_address: String? = null,
+    val balance: Double = 0.0,
+    val role: String? = null,
+    val avatar_url: String? = null,
+    val ktp_url: String? = null,
+    val is_verified: Boolean = false
 ) {
-    val full_name: String
+
 }
