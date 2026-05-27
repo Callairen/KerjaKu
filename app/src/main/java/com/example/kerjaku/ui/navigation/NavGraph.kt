@@ -76,5 +76,21 @@ fun KerjaKuNavGraph() {
 
         // TODO: composable(Screen.JobDetail.route) { backStackEntry -> ... }
         // TODO: composable(Screen.CreateJob.route) { ... }
+
+
+        composable(Screen.JobDetail.route) { backStackEntry ->
+            val jobId = backStackEntry.arguments?.getString("jobId") ?: return@composable
+            val jobViewModel: com.example.kerjaku.ui.job.JobViewModel = viewModel()
+            com.example.kerjaku.ui.job.JobDetailScreen(
+                jobId = jobId,
+                navController = rootNavController,
+                viewModel = jobViewModel
+            )
+        }
+
+        // Rute untuk Layar Pembuatan Pekerjaan (Customer Mode)
+        composable(Screen.CreateJob.route) {
+            val jobViewModel: com.example.kerjaku.ui.job.JobViewModel = viewModel()
+        }
     }
 }
