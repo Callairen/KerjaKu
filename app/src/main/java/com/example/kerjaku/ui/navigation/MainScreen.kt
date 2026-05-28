@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -23,7 +24,6 @@ fun MainScreen(
     rootNavController: NavHostController,
     profileViewModel: ProfileViewModel
 ) {
-    // NavController khusus untuk mengelola perpindahan antar tab di BottomBar
     val bottomNavController = rememberNavController()
 
     Scaffold(
@@ -36,29 +36,26 @@ fun MainScreen(
             startDestination = Screen.CariKerja.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            // TAB 1: Mode Pekerja (Mencari Pekerjaan)
             composable(Screen.CariKerja.route) {
                 val jobViewModel: JobViewModel = viewModel()
                 FindJobScreen(
-                    navController = rootNavController, // Pakai rootNav agar layar detail menutupi tab bar
+                    navController = rootNavController,
                     viewModel = jobViewModel
                 )
             }
 
-            // TAB 2: Mode Pelanggan (Mengelola Pekerjaan yang Dibuat)
             composable(Screen.KelolaPekerja.route) {
-                val jobViewModel: com.example.kerjaku.ui.job.JobViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+                val jobViewModel: JobViewModel = viewModel()
                 com.example.kerjaku.ui.customer.CustomerHomeScreen(
-                    navController = rootNavController, // Menggunakan rootNavController agar FAB menutupi BottomBar
+                    navController = rootNavController,
                     viewModel = jobViewModel
                 )
             }
 
-            // TAB 3: Profil Universal
             composable(Screen.Profil.route) {
                 ProfileScreen(
                     viewModel = profileViewModel,
-                    navController = rootNavController, // 2. Lewatkan rootNavController ke sini
+                    navController = rootNavController,
                     onLogoutClick = {
                         rootNavController.navigate(Screen.Login.route) {
                             popUpTo(0) { inclusive = true }
@@ -81,7 +78,10 @@ fun BottomNavigationBar(navController: NavHostController) {
         Screen.Profil
     )
 
-    NavigationBar {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
@@ -96,14 +96,20 @@ fun BottomNavigationBar(navController: NavHostController) {
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {
                     navController.navigate(screen.route) {
-                        // Mencegah penumpukan instance halaman yang sama
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                    selectedTextColor = Color.White,
+                    unselectedIconColor = Color.White.copy(alpha = 0.7f),
+                    unselectedTextColor = Color.White.copy(alpha = 0.7f),
+                    indicatorColor = Color.White
+                )
             )
         }
     }

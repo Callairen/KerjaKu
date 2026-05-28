@@ -12,22 +12,40 @@ import androidx.compose.ui.platform.LocalContext
 
 private val LightColorScheme = lightColorScheme(
     primary = BluePrimary,
+    onPrimary = BlueOnPrimary,
+    primaryContainer = BluePrimaryContainer,
+    onPrimaryContainer = BlueOnPrimaryContainer,
     secondary = BlueSecondary,
+    onSecondary = BlueOnSecondary,
+    secondaryContainer = BlueSecondaryContainer,
+    onSecondaryContainer = BlueOnSecondaryContainer,
+    tertiary = BlueTertiary,
+    onTertiary = BlueOnTertiary,
+    tertiaryContainer = BlueTertiaryContainer,
+    onTertiaryContainer = BlueOnTertiaryContainer,
     background = WhiteBackground,
-    surface = SurfaceWhite,
-    onPrimary = Color.White,
     onBackground = TextDark,
-    onSurface = TextDark
+    surface = WhiteBackground,
+    onSurface = TextDark,
+    surfaceVariant = GraySurface,
+    onSurfaceVariant = BlueSecondary
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryBlue,
-    secondary = SecondaryBlue,
-    background = Color(0xFF121212),
-    surface = Color(0xFF121212),
-    onPrimary = Color.White,
+    primary = BluePrimaryDark,
+    onPrimary = BlueOnPrimaryDark,
+    primaryContainer = BluePrimaryContainerDark,
+    onPrimaryContainer = BlueOnPrimaryContainerDark,
+    secondary = BlueSecondaryDark,
+    onSecondary = BlueOnSecondaryDark,
+    secondaryContainer = BlueSecondaryContainerDark,
+    onSecondaryContainer = BlueOnSecondaryContainerDark,
+    background = SurfaceDark,
     onBackground = Color.White,
-    onSurface = Color.White
+    surface = SurfaceDark,
+    onSurface = Color.White,
+    surfaceVariant = BlueSecondaryContainerDark,
+    onSurfaceVariant = BlueSecondaryDark
 )
 
 @Composable

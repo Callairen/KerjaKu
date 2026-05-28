@@ -67,5 +67,6 @@ dependencies {
     // Coil & Serialization
     implementation(libs.coil.compose)
     implementation(libs.coil.network.ktor)
+    implementation("io.coil-kt:coil-compose:2.6.0")
     implementation(libs.kotlinx.serialization.json)
 }

@@ -1,5 +1,6 @@
 package com.example.kerjaku.ui.customer
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -65,20 +66,32 @@ fun ManageApplicantsScreen(
 fun ApplicantItemCard(
     application: JobApplication,
     onAccept: () -> Unit,
-    onVerify: () -> Unit // Tambahkan parameter aksi ini
+    onVerify: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-// Ubah bagian ini:
             Text(
-                text = application.profiles?.fullName ?: "Pengguna Tidak Diketahui", // Gunakan fullName
-                style = MaterialTheme.typography.titleLarge
+                text = application.profiles?.fullName ?: "Pengguna Tidak Diketahui",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
-            Text("Kontak: ${application.profiles?.phone ?: "-"}")
-            Text("Lokasi Pekerja: ${application.profiles?.city ?: "-"}")
+            Text(
+                text = "Kontak: ${application.profiles?.phone ?: "-"}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = "Lokasi Pekerja: ${application.profiles?.city ?: "-"}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -89,14 +102,33 @@ fun ApplicantItemCard(
                     }
                 }
                 "ACCEPTED" -> {
-                    Text("Status: Sedang Berjalan", color = MaterialTheme.colorScheme.primary)
-                    Text("Menunggu pekerja menyelesaikan tugasnya.", style = MaterialTheme.typography.bodySmall)
+                    Text(
+                        text = "Status: Sedang Berjalan",
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(
+                        text = "Menunggu pekerja menyelesaikan tugasnya.",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
                 "FINISHED" -> {
-                    Text("Status: Laporan Selesai Diterima", color = MaterialTheme.colorScheme.tertiary)
+                    Text(
+                        text = "Status: Laporan Selesai Diterima",
+                        color = MaterialTheme.colorScheme.tertiary,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("Catatan Pekerja: ${application.completion_notes ?: "Tidak ada"}")
-                    Text("Tautan Bukti: ${application.completion_proof_url ?: "Tidak ada"}")
+                    Text(
+                        text = "Catatan Pekerja: ${application.completion_notes ?: "Tidak ada"}",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(
+                        text = "Tautan Bukti: ${application.completion_proof_url ?: "Tidak ada"}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
                     Button(
                         onClick = onVerify,
@@ -107,10 +139,17 @@ fun ApplicantItemCard(
                     }
                 }
                 "APPROVED_AND_PAID" -> {
-                    Text("Status: Selesai & Dibayar", color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        text = "Status: Selesai & Dibayar",
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
                 else -> {
-                    Text("Status: ${application.status}")
+                    Text(
+                        text = "Status: ${application.status}",
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
             }
         }

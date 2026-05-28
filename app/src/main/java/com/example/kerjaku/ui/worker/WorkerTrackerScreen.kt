@@ -1,11 +1,13 @@
 package com.example.kerjaku.ui.worker
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.kerjaku.data.model.JobApplication
@@ -25,7 +27,17 @@ fun WorkerTrackerScreen(
     }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Pekerjaan Saya") }) }
+        topBar = { 
+            TopAppBar(
+                title = { 
+                    Text(
+                        text = "Pekerjaan Saya",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold
+                    ) 
+                }
+            ) 
+        }
     ) { padding ->
         Column(modifier = Modifier.padding(padding).padding(16.dp).fillMaxSize()) {
             if (isLoading) {
@@ -53,32 +65,60 @@ fun WorkerTrackerScreen(
 fun ApplicationTrackerCard(application: JobApplication, onFinishClick: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(application.jobs?.title ?: "Pekerjaan Tidak Diketahui", style = MaterialTheme.typography.titleLarge)
-            Text("Lokasi: ${application.jobs?.city ?: "-"}")
+            Text(
+                text = application.jobs?.title ?: "Pekerjaan Tidak Diketahui",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = "Lokasi: ${application.jobs?.city ?: "-"}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
             Spacer(modifier = Modifier.height(12.dp))
 
             // Logika UI berdasarkan status
             when (application.status) {
                 "APPLIED" -> {
-                    Text("Status: Menunggu Persetujuan Pelanggan", color = MaterialTheme.colorScheme.tertiary)
+                    Text(
+                        text = "Status: Menunggu Persetujuan Pelanggan",
+                        color = MaterialTheme.colorScheme.tertiary,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
                 "ACCEPTED" -> {
-                    Text("Status: Sedang Berjalan", color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        text = "Status: Sedang Berjalan",
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(onClick = onFinishClick, modifier = Modifier.fillMaxWidth()) {
                         Text("Tandai Selesai")
                     }
                 }
                 "FINISHED" -> {
-                    Text("Status: Selesai (Menunggu Verifikasi)", color = MaterialTheme.colorScheme.secondary)
+                    Text(
+                        text = "Status: Selesai (Menunggu Verifikasi)",
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
                 "APPROVED_AND_PAID" -> {
-                    Text("Status: Tuntas & Upah Telah Diterima", color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        text = "Status: Tuntas & Upah Telah Diterima",
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
-                else -> Text("Status: ${application.status}")
+                else -> Text("Status: ${application.status}", style = MaterialTheme.typography.bodySmall)
             }
         }
     }
