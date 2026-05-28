@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun RegisterScreen(
@@ -19,16 +20,6 @@ fun RegisterScreen(
     viewModel: AuthViewModel = viewModel()
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        // Logo branding at top-left
-        Text(
-            text = "KerjaKu.",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .padding(24.dp)
-                .align(Alignment.TopStart)
-        )
 
         Column(
             modifier = Modifier
@@ -40,6 +31,16 @@ fun RegisterScreen(
         ) {
             Spacer(modifier = Modifier.height(48.dp))
 
+            Text(
+                text = "KerjaKu.",
+                style =  MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.ExtraBold, // Ditebalkan agar lebih *stand out*
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Daftar Akun",
                 style = MaterialTheme.typography.headlineSmall,

@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun LoginScreen(
@@ -20,15 +21,7 @@ fun LoginScreen(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         // Logo branding at top-left
-        Text(
-            text = "KerjaKu.",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .padding(24.dp)
-                .align(Alignment.TopStart)
-        )
+
 
         Column(
             modifier = Modifier
@@ -39,7 +32,16 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(48.dp))
-            
+            Text(
+                text = "KerjaKu.",
+                style =  MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.ExtraBold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Selamat Datang",
                 style = MaterialTheme.typography.headlineSmall,
