@@ -14,6 +14,7 @@ data class Job(
     val city: String,
     val district: String? = null,
     val village: String? = null,
+    val image_url: String? = null,
     val status: String = "OPEN",
     val created_at: String? = null
 )

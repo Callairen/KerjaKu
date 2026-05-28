@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.rpc
+import io.github.jan.supabase.storage.storage
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -20,6 +21,7 @@ data class CreateJobRequest(
     val p_duration_days: Int,
     val p_city: String,
     val p_district: String?,
+    val p_image_url: String?,
     val p_village: String?
 )
 
@@ -58,8 +60,20 @@ class JobRepository {
     }
 
     // Menyimpan pekerjaan baru ke database
-    suspend fun createJob(job: Job) {
+    suspend fun createJob(
+        job: Job,
+        imageBytes: ByteArray?
+    ){
         withContext(Dispatchers.IO) {
+
+            val imageUrl = if (imageBytes != null) {
+                uploadJobImage(
+                    userId = job.employer_id,
+                    imageBytes = imageBytes
+                )
+            } else {
+                null
+            }
             val request = CreateJobRequest(
                 p_employer_id = job.employer_id,
                 p_category_id = job.category_id,
@@ -69,7 +83,8 @@ class JobRepository {
                 p_duration_days = job.duration_days,
                 p_city = job.city,
                 p_district = job.district,
-                p_village = job.village
+                p_village = job.village,
+                p_image_url = imageUrl
             )
             // Memanggil RPC yang mengecek saldo
             client.postgrest.rpc("create_job_with_balance_check", request)
@@ -165,6 +180,15 @@ class JobRepository {
             ) {
                 filter { eq("id", jobId) }
             }
+        }
+    }
+    suspend fun uploadJobImage(userId: String, imageBytes: ByteArray): String {
+        return withContext(Dispatchers.IO) {
+            val path = "$userId/job_${System.currentTimeMillis()}.jpg"
+            client.storage["job-images"].upload(path, imageBytes) {
+                upsert = true
+            }
+            client.storage["job-images"].publicUrl(path)
         }
     }
 }

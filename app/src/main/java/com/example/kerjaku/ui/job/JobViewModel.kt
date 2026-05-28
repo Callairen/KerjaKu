@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+
 class JobViewModel : ViewModel() {
     private val repository = JobRepository()
 
@@ -66,29 +67,51 @@ class JobViewModel : ViewModel() {
         }
     }
 
-    fun createNewJob(title: String, description: String, wage: Double, duration: Int, city: String, district: String, village: String) {
+    // Ubah signature fungsi createNewJob
+    fun createNewJob(
+    title: String,
+    description: String,
+    wage: Double,
+    duration: Int,
+    city: String,
+    district: String,
+    village: String,
+    imageBytes: ByteArray?
+    ) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // Ambil UID user yang sedang login dari sesi Supabase
                 val currentUser = SupabaseApi.client.auth.currentUserOrNull()
                 currentUser?.let { user ->
-                    val newJob = Job(
-                        employer_id = user.id,
+                    var uploadedImageUrl: String? = null
+
+                    if (imageBytes != null) {
+                        uploadedImageUrl = repository.uploadJobImage(user.id, imageBytes)
+                    }
+
+                    val job = Job(
+                        id = "",
+                        employer_id = currentUser.id,
+                        category_id = null,
                         title = title,
                         description = description,
                         wage = wage,
                         duration_days = duration,
                         city = city,
                         district = district,
-                        village = village
+                        village = village,
+                        image_url = null,
+                        status = "OPEN"
                     )
-                    repository.createJob(newJob)
+                    repository.createJob(
+                        job,
+                        imageBytes
+                    )
                     _actionSuccess.value = true
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                _errorMessage.value = "Saldo Anda tidak mencukupi untuk membayar upah pekerjaan ini. Silakan isi ulang."
+                _errorMessage.value = "Gagal membuat pekerjaan: Saldo tidak cukup atau terjadi kesalahan jaringan."
             } finally {
                 _isLoading.value = false
             }
