@@ -7,6 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -60,7 +61,15 @@ fun CreateJobScreen(
     }
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Buat Pekerjaan Baru") })
+            TopAppBar(
+                title = { 
+                    Text(
+                        text = "Buat Lowongan Baru",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold
+                    ) 
+                }
+            )
         }
     ) { padding ->
         Column(

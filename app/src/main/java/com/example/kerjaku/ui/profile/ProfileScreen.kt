@@ -87,7 +87,7 @@ fun ProfileScreen(
                     color = MaterialTheme.colorScheme.secondary
                 )
 
-                // CARD SALDO DOMPET
+                // CARD SALDO DOMPET - Updated to have button on the right, vertically centered
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -96,25 +96,38 @@ fun ProfileScreen(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     )
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
+                    Row(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "Saldo Dompet",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+                            )
 
-                        Text(
-                            text = "Saldo Dompet",
-                            style = MaterialTheme.typography.titleMedium
-                        )
+                            Spacer(modifier = Modifier.height(4.dp))
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Rp ${profile.balance ?: 0.0}",
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
 
-                        Text(
-                            text = "Rp ${profile.balance ?: 0.0}",
-                            style = MaterialTheme.typography.headlineMedium,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
-                        )
-                    }
-                    Button(onClick = { navController.navigate("top_up") }) {
-                        Text("Isi Saldo")
+                        Button(
+                            onClick = { navController.navigate("top_up") },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary
+                            ),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            Text("Isi Saldo")
+                        }
                     }
                 }
 

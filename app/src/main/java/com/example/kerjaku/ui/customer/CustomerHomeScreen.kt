@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.kerjaku.ui.job.JobViewModel
@@ -34,7 +35,11 @@ fun CustomerHomeScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding).padding(16.dp).fillMaxSize()) {
-            Text("Pekerjaan yang Saya Buat", style = MaterialTheme.typography.headlineSmall)
+            Text(
+                text = "Pekerjaan yang Saya Buat",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
+            )
             Spacer(modifier = Modifier.height(16.dp))
 
             if (isLoading) {

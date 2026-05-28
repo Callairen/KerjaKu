@@ -1,11 +1,13 @@
 package com.example.kerjaku.ui.worker
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.kerjaku.data.model.Job
@@ -29,7 +31,13 @@ fun FindJobScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Katalog Pekerjaan") },
+                title = { 
+                    Text(
+                        text = "Katalog Pekerjaan",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold
+                    ) 
+                },
                 actions = {
                     IconButton(onClick = { navController.navigate("worker_tracker") }) {
                         Icon(Icons.Default.List, contentDescription = "Pekerjaan Saya")
@@ -57,21 +65,42 @@ fun FindJobScreen(
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JobItemCard(job: Job, onClick: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         onClick = onClick,
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(job.title, style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text("Upah: Rp${job.wage}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text("Lokasi: ${job.village ?: "-"}, ${job.city}", style = MaterialTheme.typography.bodySmall)
-            Text("Durasi: ${job.duration_days} hari", style = MaterialTheme.typography.bodySmall)
+            Text(
+                text = job.title,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Upah: Rp${job.wage}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = "Lokasi: ${job.village ?: "-"}, ${job.city}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = "Durasi: ${job.duration_days} hari",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
