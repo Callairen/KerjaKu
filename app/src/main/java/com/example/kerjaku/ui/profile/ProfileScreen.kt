@@ -88,7 +88,7 @@ fun ProfileScreen(
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-
+            
             if (viewModel.isLoading) {
                 CircularProgressIndicator()
             } else {
