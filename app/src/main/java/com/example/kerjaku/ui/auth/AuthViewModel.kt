@@ -15,10 +15,11 @@ class AuthViewModel : ViewModel() {
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var fullName by mutableStateOf("")
-    var role by mutableStateOf("customer") // 'worker' atau 'customer'
+    var role by mutableStateOf("customer")
 
     var isLoading by mutableStateOf(false)
     var errorMessage by mutableStateOf<String?>(null)
+
 
     fun login(onSuccess: () -> Unit) = viewModelScope.launch {
         isLoading = true

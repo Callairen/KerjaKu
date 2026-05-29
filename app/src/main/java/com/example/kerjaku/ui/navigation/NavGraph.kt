@@ -14,8 +14,6 @@ import com.example.kerjaku.ui.profile.ProfileViewModel
 @Composable
 fun KerjaKuNavGraph() {
     val rootNavController = rememberNavController()
-
-    // Inisialisasi ViewModels di level Root agar state terjaga
     val authViewModel: AuthViewModel = viewModel()
     val profileViewModel: ProfileViewModel = viewModel()
 
@@ -24,12 +22,11 @@ fun KerjaKuNavGraph() {
         startDestination = Screen.Login.route
     ) {
 
-        // --- AUTENTIKASI ---
+        //auth
         composable(Screen.Login.route) {
             LoginScreen(
                 viewModel = authViewModel,
                 onLoginSuccess = {
-                    // Jika login sukses, arahkan ke MainScreen (Container Bottom Nav)
                     rootNavController.navigate(Screen.Main.route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
@@ -130,3 +127,6 @@ fun KerjaKuNavGraph() {
         }
     }
 }
+
+
+

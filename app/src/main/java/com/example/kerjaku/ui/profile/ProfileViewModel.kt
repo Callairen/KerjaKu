@@ -144,10 +144,7 @@ class ProfileViewModel : ViewModel() {
             val uid = SupabaseApi.client.auth.currentUserOrNull()?.id ?: return@launch
             val request = TopUpRequest(p_user_id = uid, p_amount = amount)
 
-            // Panggil RPC database
             SupabaseApi.client.postgrest.rpc("top_up_balance", request)
-
-            // Segarkan profil agar saldo terbaru muncul
             loadProfile()
             onSuccess()
         } catch (e: Exception) {

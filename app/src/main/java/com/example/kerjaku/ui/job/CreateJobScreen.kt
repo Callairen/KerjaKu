@@ -40,7 +40,7 @@ fun CreateJobScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val actionSuccess by viewModel.actionSuccess.collectAsState()
 
-    // IMAGE PICKER
+    //img picker
     val context = LocalContext.current
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -290,3 +290,4 @@ fun CreateJobScreen(
         }
     }
 }
+

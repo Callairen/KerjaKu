@@ -34,7 +34,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(48.dp))
             Text(
                 text = "KerjaKu.",
-                style =  MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.ExtraBold,
                 textAlign = TextAlign.Center,
@@ -73,7 +73,11 @@ fun LoginScreen(
 
             viewModel.errorMessage?.let { errorMsg ->
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = errorMsg, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = errorMsg,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -84,7 +88,10 @@ fun LoginScreen(
                 enabled = !viewModel.isLoading
             ) {
                 if (viewModel.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary)
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 } else {
                     Text("Masuk")
                 }
@@ -98,3 +105,5 @@ fun LoginScreen(
         }
     }
 }
+
+
